@@ -84,7 +84,13 @@ class NoseTestCommand(TestCommand):
         import nose
         nose.run_exit(argv=['nosetests', '--with-xunit', '--xunit-file=test-reports/unittests.xml'])
 
-common_requirements=[]
+common_requirements=[
+    "pyserial >= 2.7",
+    "enum34 >= 1.0.4",
+    "click",
+    "ecdsa >= 0.13",
+    "behave"
+]
 
 setup(
     name="nrfutil",
