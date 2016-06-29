@@ -180,7 +180,7 @@ class Firmware(object):
         if init_packet_data:
             self.init_packet_data = InitPacketData(**init_packet_data)
 
-        self.hex_fil = hex_file
+        self.hex_file = hex_file
 
 
 class SoftdeviceBootloaderFirmware(Firmware):
