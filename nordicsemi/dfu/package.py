@@ -336,13 +336,13 @@ class Package(object):
         """
         Unpacks a Nordic DFU package.
 
-        :param str package_path: Path to the package
+        :param str or file-like object package_path: Path to the package or file-like object
         :param str target_dir: Target directory to unpack the package to
         :return: Manifest Manifest: Returns a manifest back to the user. The manifest is a parse datamodel
         of the manifest found in the Nordic DFU package.
         """
 
-        if not os.path.isfile(package_path):
+        if isinstance(package_path, str) and not os.path.isfile(package_path):
             raise NordicSemiException("Package {0} not found.".format(package_path))
 
         target_dir = os.path.abspath(target_dir)
