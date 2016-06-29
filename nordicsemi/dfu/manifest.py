@@ -66,6 +66,7 @@ class ManifestGenerator(object):
             # Strip path, add only filename
             _firmware.bin_file = os.path.basename(firmware_dict[FirmwareKeys.BIN_FILENAME])
             _firmware.dat_file = os.path.basename(firmware_dict[FirmwareKeys.DAT_FILENAME])
+            _firmware.hex_file = os.path.basename(firmware_dict[FirmwareKeys.FIRMWARE_FILENAME])
 
             init_packet_data = InitPacketData()
 
@@ -163,7 +164,8 @@ class Firmware(object):
     def __init__(self,
                  bin_file=None,
                  dat_file=None,
-                 init_packet_data=None):
+                 init_packet_data=None,
+                 hex_file=None):
         """
         The firmware datamodel
 
@@ -177,6 +179,8 @@ class Firmware(object):
 
         if init_packet_data:
             self.init_packet_data = InitPacketData(**init_packet_data)
+
+        self.hex_fil = hex_file
 
 
 class SoftdeviceBootloaderFirmware(Firmware):

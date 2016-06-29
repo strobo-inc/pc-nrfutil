@@ -191,6 +191,10 @@ class Package(object):
             # Calculate the hash for the .bin file located in the work directory
             bin_file_path = os.path.join(work_directory, firmware[FirmwareKeys.BIN_FILENAME])
 
+            hex_src = firmware[FirmwareKeys.FIRMWARE_FILENAME]
+            hex_dst = os.path.join(work_directory, os.path.basename(hex_src))
+            shutil.copyfile(hex_src, hex_dst)
+
             init_packet_data = firmware[FirmwareKeys.INIT_PACKET_DATA]
 
             if self.dfu_ver <= 0.5:
