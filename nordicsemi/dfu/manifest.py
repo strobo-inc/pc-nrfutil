@@ -74,6 +74,7 @@ class ManifestGenerator(object):
             _firmware.bin_file = os.path.basename(firmware_dict[FirmwareKeys.BIN_FILENAME])
             _firmware.dat_file = os.path.basename(firmware_dict[FirmwareKeys.DAT_FILENAME])
             _firmware.hex_file = os.path.basename(firmware_dict[FirmwareKeys.HEX_FILENAME])
+            _firmware.init_packet_data = firmware_dict[FirmwareKeys.INIT_PACKET_DATA]
 
             if key == HexType.APPLICATION or key == HexType.EXTERNAL_APPLICATION:
                 self.manifest.application = _firmware
@@ -134,18 +135,22 @@ class Firmware(object):
                  bin_file=None,
                  dat_file=None,
                  hex_file=None,
+                 init_packet_data=None,
                  info_read_only_metadata=None):
         """
         The firmware datamodel
 
         :param str bin_file: Firmware binary file
         :param str dat_file: Firmware .dat file (init packet for Nordic DFU)
+        :param str hex_file: Firmware hex file (used for mass production)
+        :param dict init_packet_data: init packet readable data
         :param int info_read_only_metadata: The metadata about this firwmare image
         :return:
         """
         self.dat_file = dat_file
         self.bin_file = bin_file
         self.hex_file = hex_file
+        self.init_packet_data = init_packet_data
 
         if info_read_only_metadata:
             self.info_read_only_metadata = FWMetaData(**info_read_only_metadata)
