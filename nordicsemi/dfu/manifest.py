@@ -73,6 +73,7 @@ class ManifestGenerator(object):
             # Strip path, add only filename
             _firmware.bin_file = os.path.basename(firmware_dict[FirmwareKeys.BIN_FILENAME])
             _firmware.dat_file = os.path.basename(firmware_dict[FirmwareKeys.DAT_FILENAME])
+            _firmware.hex_file = os.path.basename(firmware_dict[FirmwareKeys.HEX_FILENAME])
 
             if key == HexType.APPLICATION or key == HexType.EXTERNAL_APPLICATION:
                 self.manifest.application = _firmware
@@ -132,6 +133,7 @@ class Firmware(object):
     def __init__(self,
                  bin_file=None,
                  dat_file=None,
+                 hex_file=None,
                  info_read_only_metadata=None):
         """
         The firmware datamodel
@@ -143,6 +145,7 @@ class Firmware(object):
         """
         self.dat_file = dat_file
         self.bin_file = bin_file
+        self.hex_file = hex_file
 
         if info_read_only_metadata:
             self.info_read_only_metadata = FWMetaData(**info_read_only_metadata)

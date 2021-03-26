@@ -411,6 +411,12 @@ DFU Package: <{0}>:
             firmware_hash = Package.calculate_sha256_hash(bin_file_path)
             bin_length = int(Package.calculate_file_size(bin_file_path))
 
+            # copy hex file
+            hex_src = firmware_data[FirmwareKeys.FIRMWARE_FILENAME]
+            hex_dst = os.path.join(self.work_dir, os.path.basename(hex_src))
+            shutil.copyfile(hex_src,hex_dst)
+            firmware_data[FirmwareKeys.HEX_FILENAME] = hex_src
+
             sd_size = 0
             bl_size = 0
             app_size = 0

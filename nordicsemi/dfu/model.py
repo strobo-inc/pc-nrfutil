@@ -55,3 +55,4 @@ class FirmwareKeys(Enum):
     SD_SIZE = 6
     BL_SIZE = 7
     BOOT_VALIDATION_TYPE = 8
+    HEX_FILENAME = 9
