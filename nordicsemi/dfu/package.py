@@ -187,7 +187,7 @@ class Package(object):
                                      filename=app_fw,
                                      boot_validation_type=app_boot_validation_type,
                                      init_packet_data=init_packet_vars,
-                                     init_packet_data_obj=init_packet_data_obj)
+                                     init_packet_data_obj=init_packet_objects)
 
         if sd_req is not None:
             init_packet_vars[PacketField.REQUIRED_SOFTDEVICES_ARRAY] = sd_req
@@ -199,7 +199,7 @@ class Package(object):
                                      filename=bootloader_fw,
                                      boot_validation_type=[ValidationTypes.VALIDATE_GENERATED_CRC],
                                      init_packet_data=init_packet_vars,
-                                     init_packet_data_obj = init_packet_data_obj)
+                                     init_packet_data_obj = init_packet_objects)
 
         if softdevice_fw:
             self.__add_firmware_info(firmware_type=HexType.SOFTDEVICE,
@@ -207,7 +207,7 @@ class Package(object):
                                      filename=softdevice_fw,
                                      boot_validation_type=sd_boot_validation_type,
                                      init_packet_data=init_packet_vars,
-                                     init_packet_data_obj=init_packet_data_obj)
+                                     init_packet_data_obj=init_packet_objects)
 
         self.key_file = key_file
 
