@@ -623,7 +623,7 @@ DFU Package: <{0}>:
         
         if firmware_version is not None:
             self.firmwares_data[firmware_type][FirmwareKeys.INIT_PACKET_DATA][PacketField.FW_VERSION] = firmware_version
-            self.firmwares_data[firmware_type]["init_packet_data"]["fw_version"]=firmware_version
+            self.firmwares_data_obj[firmware_type]["init_packet_data"]["fw_version"]=firmware_version
 
     @staticmethod
     def normalize_firmware_to_bin(work_dir, firmware_path):
