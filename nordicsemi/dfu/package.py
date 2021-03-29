@@ -406,7 +406,7 @@ DFU Package: <{0}>:
                                      firmware_version=bootloader_fw_data[FirmwareKeys.INIT_PACKET_DATA][PacketField.FW_VERSION],  # use bootloader version in combination with SD
                                      filename=sd_bl_file_path,
                                      init_packet_data=softdevice_fw_data[FirmwareKeys.INIT_PACKET_DATA],
-                                     init_packet_data_obj=softdevice_fw_data_obj["init_packet_data"]
+                                     init_packet_data_obj=softdevice_fw_data_obj["init_packet_data"],
                                      boot_validation_type=boot_validation_type,
                                      sd_size=softdevice_size,
                                      bl_size=bootloader_size)
