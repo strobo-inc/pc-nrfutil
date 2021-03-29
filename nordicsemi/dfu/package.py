@@ -150,26 +150,35 @@ class Package(object):
         """
 
         init_packet_vars = {}
+        init_packet_objects = {}
         if debug_mode is not None:
             init_packet_vars[PacketField.DEBUG_MODE] = debug_mode
+            init_packet_objects["debug_mode"] = debug_mode
 
         if hw_version is not None:
             init_packet_vars[PacketField.HW_VERSION] = hw_version
+            init_packet_objects["device_revision"] = hw_version
 
         if sd_id is not None:
             init_packet_vars[PacketField.REQUIRED_SOFTDEVICES_ARRAY] = sd_id
+            init_packet_objects["softdevice_req"] = sd_id
 
         if sd_boot_validation is not None:
             sd_boot_validation_type = [ValidationTypes[sd_boot_validation]]
+            sd_boot_validation_typename = sd_boot_validation
         else:
             sd_boot_validation_type = [ValidationTypes.VALIDATE_GENERATED_CRC]
+            sd_boot_validation_typename = ValidationTypes.VALIDATE_GENERATED_CRC.name
 
         if app_boot_validation is not None:
             app_boot_validation_type = [ValidationTypes[app_boot_validation]]
+            app_boot_validation_typename = app_boot_validation
         else:
             app_boot_validation_type = [ValidationTypes.VALIDATE_GENERATED_CRC]
+            app_boot_validation_typename = ValidationTypes.VALIDATE_GENERATED_CRC.name
 
         self.firmwares_data = {}
+        self.firmwares_data_obj = {}
 
         if app_fw:
             firmware_type = HexType.EXTERNAL_APPLICATION if is_external else HexType.APPLICATION
@@ -177,24 +186,28 @@ class Package(object):
                                      firmware_version=app_version,
                                      filename=app_fw,
                                      boot_validation_type=app_boot_validation_type,
-                                     init_packet_data=init_packet_vars)
+                                     init_packet_data=init_packet_vars,
+                                     init_packet_data_obj=init_packet_data_obj)
 
         if sd_req is not None:
             init_packet_vars[PacketField.REQUIRED_SOFTDEVICES_ARRAY] = sd_req
+            init_packet_objects["softdevice_req"] = sd_req
 
         if bootloader_fw:
             self.__add_firmware_info(firmware_type=HexType.BOOTLOADER,
                                      firmware_version=bl_version,
                                      filename=bootloader_fw,
                                      boot_validation_type=[ValidationTypes.VALIDATE_GENERATED_CRC],
-                                     init_packet_data=init_packet_vars)
+                                     init_packet_data=init_packet_vars,
+                                     init_packet_data_obj = init_packet_data_obj)
 
         if softdevice_fw:
             self.__add_firmware_info(firmware_type=HexType.SOFTDEVICE,
                                      firmware_version=0xFFFFFFFF,
                                      filename=softdevice_fw,
                                      boot_validation_type=sd_boot_validation_type,
-                                     init_packet_data=init_packet_vars)
+                                     init_packet_data=init_packet_vars,
+                                     init_packet_data_obj=init_packet_data_obj)
 
         self.key_file = key_file
 
@@ -370,6 +383,8 @@ DFU Package: <{0}>:
             # Removing softdevice and bootloader data from dictionary and adding the combined later
             softdevice_fw_data = self.firmwares_data.pop(HexType.SOFTDEVICE)
             bootloader_fw_data = self.firmwares_data.pop(HexType.BOOTLOADER)
+            self.firmwares_data_obj.pop(HexType.SOFTDEVICE)
+            softdevice_fw_data_obj = self.firmwares_data_obj.pop(HexType.BOOTLOADER)
 
             softdevice_fw_name = softdevice_fw_data[FirmwareKeys.FIRMWARE_FILENAME]
             bootloader_fw_name = bootloader_fw_data[FirmwareKeys.FIRMWARE_FILENAME]
@@ -391,6 +406,7 @@ DFU Package: <{0}>:
                                      firmware_version=bootloader_fw_data[FirmwareKeys.INIT_PACKET_DATA][PacketField.FW_VERSION],  # use bootloader version in combination with SD
                                      filename=sd_bl_file_path,
                                      init_packet_data=softdevice_fw_data[FirmwareKeys.INIT_PACKET_DATA],
+                                     init_packet_data_obj=softdevice_fw_data_obj["init_packet_data"]
                                      boot_validation_type=boot_validation_type,
                                      sd_size=softdevice_size,
                                      bl_size=bootloader_size)
@@ -579,27 +595,35 @@ DFU Package: <{0}>:
         return signer.sign(data_buffer)
 
     def create_manifest(self):
-        manifest = ManifestGenerator(self.firmwares_data)
+        manifest = ManifestGenerator(self.firmwares_data,self.firmwares_data_obj)
         return manifest.generate_manifest()
 
     @staticmethod
     def _is_bootloader_softdevice_combination(firmwares):
         return (HexType.BOOTLOADER in firmwares) and (HexType.SOFTDEVICE in firmwares)
 
-    def __add_firmware_info(self, firmware_type, firmware_version, filename, init_packet_data, boot_validation_type, sd_size=None, bl_size=None):
+    def __add_firmware_info(self, firmware_type, firmware_version, filename, init_packet_data,init_packet_data_obj, boot_validation_type, sd_size=None, bl_size=None):
         self.firmwares_data[firmware_type] = {
             FirmwareKeys.FIRMWARE_FILENAME: filename,
             FirmwareKeys.INIT_PACKET_DATA: init_packet_data.copy(),
             # Copying init packet to avoid using the same for all firmware
             FirmwareKeys.BOOT_VALIDATION_TYPE: boot_validation_type,
             }
+        self.firmwares_data_obj[firmware_type] = {
+            "firmware_filename": filename,
+            "init_packet_data": init_packet_data_obj,
+            "boot_validation_type": boot_validation_type
+        }
 
         if firmware_type == HexType.SD_BL:
             self.firmwares_data[firmware_type][FirmwareKeys.SD_SIZE] = sd_size
             self.firmwares_data[firmware_type][FirmwareKeys.BL_SIZE] = bl_size
+            self.firmwares_data_obj[firmware_type]["sd_size"]=sd_size
+            self.firmwares_data_obj[firmware_type]["bl_size"]=bl_size
         
         if firmware_version is not None:
             self.firmwares_data[firmware_type][FirmwareKeys.INIT_PACKET_DATA][PacketField.FW_VERSION] = firmware_version
+            self.firmwares_data[firmware_type]["init_packet_data"]["fw_version"]=firmware_version
 
     @staticmethod
     def normalize_firmware_to_bin(work_dir, firmware_path):

@@ -46,13 +46,14 @@ from nordicsemi.dfu.model import HexType, FirmwareKeys
 
 
 class ManifestGenerator(object):
-    def __init__(self, firmwares_data):
+    def __init__(self, firmwares_data, firmware_data_obj):
         """
         The Manifest Generator constructor. Needs a data structure to generate a manifest from.
 
         :type dict firmwares_data: The firmwares data structure describing the Nordic DFU package
         """
         self.firmwares_data = firmwares_data
+        self.firmwares_data_obj = firmware_data_obj
         self.manifest = None
 
     def generate_manifest(self):
@@ -60,6 +61,7 @@ class ManifestGenerator(object):
 
         for key in self.firmwares_data:
             firmware_dict = self.firmwares_data[key]
+            firmware_dict_obj = self.firmwares_data_obj[key]
 
             if key == HexType.SD_BL:
                 _firmware = SoftdeviceBootloaderFirmware()
@@ -74,7 +76,7 @@ class ManifestGenerator(object):
             _firmware.bin_file = os.path.basename(firmware_dict[FirmwareKeys.BIN_FILENAME])
             _firmware.dat_file = os.path.basename(firmware_dict[FirmwareKeys.DAT_FILENAME])
             _firmware.hex_file = os.path.basename(firmware_dict[FirmwareKeys.HEX_FILENAME])
-            _firmware.init_packet_data = firmware_dict[FirmwareKeys.INIT_PACKET_DATA]
+            _firmware.init_packet_data = firmware_dict_obj["init_packet_data"]
 
             if key == HexType.APPLICATION or key == HexType.EXTERNAL_APPLICATION:
                 self.manifest.application = _firmware
