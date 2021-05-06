@@ -648,7 +648,7 @@ DFU Package: <{0}>:
         of the manifest found in the Nordic DFU package.
         """
 
-        if not os.path.isfile(package_path):
+        if isinstance(package_path, str) and not os.path.isfile(package_path):
             raise NordicSemiException("Package {0} not found.".format(package_path))
 
         target_dir = os.path.abspath(target_dir)
