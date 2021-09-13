@@ -183,7 +183,8 @@ class Manifest:
                  application=None,
                  bootloader=None,
                  softdevice=None,
-                 softdevice_bootloader=None):
+                 softdevice_bootloader=None,
+                 dfu_version=None):
         """
         The Manifest data model.
 
