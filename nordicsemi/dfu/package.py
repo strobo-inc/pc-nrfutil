@@ -1,4 +1,4 @@
-from __future__ import absolute_import
+
 #
 # Copyright (c) 2016 Nordic Semiconductor ASA
 # All rights reserved.
@@ -416,7 +416,7 @@ DFU Package: <{0}>:
             sd_bin_path = os.path.join(self.work_dir, sd_bin)
             sd_bin_created = True
 
-        for key, firmware_data in self.firmwares_data.iteritems():
+        for key, firmware_data in self.firmwares_data.items():
 
             # Normalize the firmware file and store it in the work directory
             firmware_data[FirmwareKeys.BIN_FILENAME] = \
@@ -455,7 +455,7 @@ DFU Package: <{0}>:
                     else:
                         boot_validation_bytes_array.append(Package.sign_firmware(self.key_file, bin_file_path))
                 else:
-                    boot_validation_bytes_array.append('')
+                    boot_validation_bytes_array.append(b'')
 
 
             init_packet = InitPacketPB(

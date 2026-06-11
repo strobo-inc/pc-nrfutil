@@ -166,7 +166,7 @@ class BLDFUSettings(object):
         list = []
         if start_addr == None and end_addr == None:
             hex_dict = ih_object.todict()
-            for addr, byte in hex_dict.items():
+            for addr, byte in list(hex_dict.items()):
                 list.append(byte)
         else:
             for addr in range(start_addr, end_addr + 1):
@@ -214,11 +214,11 @@ class BLDFUSettings(object):
             elif app_boot_validation_type == 'VALIDATE_GENERATED_SHA256':
                 self.app_boot_validation_type = 2 & 0xffffffff
                 sha256 = Package.calculate_sha256_hash(self.app_bin)
-                self.app_boot_validation_bytes = bytearray([int(binascii.hexlify(i), 16) for i in list(sha256)][31::-1])
+                self.app_boot_validation_bytes = bytearray(bytearray(sha256)[31::-1])
             elif app_boot_validation_type == 'VALIDATE_ECDSA_P256_SHA256':
                 self.app_boot_validation_type = 3 & 0xffffffff
                 ecdsa = Package.sign_firmware(key_file, self.app_bin)
-                self.app_boot_validation_bytes = bytearray([int(binascii.hexlify(i), 16) for i in list(ecdsa)])
+                self.app_boot_validation_bytes = bytearray(ecdsa)
             else:  # This also covers 'NO_VALIDATION' case
                 self.app_boot_validation_type = 0 & 0xffffffff
                 self.app_boot_validation_bytes = bytearray(0)
@@ -253,11 +253,11 @@ class BLDFUSettings(object):
             elif sd_boot_validation_type == 'VALIDATE_GENERATED_SHA256':
                 self.sd_boot_validation_type = 2 & 0xffffffff
                 sha256 = Package.calculate_sha256_hash(self.sd_bin)
-                self.sd_boot_validation_bytes = bytearray([int(binascii.hexlify(i), 16) for i in list(sha256)][31::-1])
+                self.sd_boot_validation_bytes = bytearray(bytearray(sha256)[31::-1])
             elif sd_boot_validation_type == 'VALIDATE_ECDSA_P256_SHA256':
                 self.sd_boot_validation_type = 3 & 0xffffffff
                 ecdsa = Package.sign_firmware(key_file, self.sd_bin)
-                self.sd_boot_validation_bytes = bytearray([int(binascii.hexlify(i), 16) for i in list(ecdsa)])
+                self.sd_boot_validation_bytes = bytearray(ecdsa)
             else:  # This also covers 'NO_VALIDATION_CASE'
                 self.sd_boot_validation_type = 0 & 0xffffffff
                 self.sd_boot_validation_bytes = bytearray(0)

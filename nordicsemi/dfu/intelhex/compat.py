@@ -44,8 +44,8 @@ import sys
 
 if sys.version_info[0] >= 3:
     def asbytes(s):
-        if isinstance(s, bytes):
-            return s
+        if isinstance(s, (bytes, bytearray)):
+            return bytes(s)
         return s.encode('latin1')
     def asstr(s):
         if isinstance(s, str):
