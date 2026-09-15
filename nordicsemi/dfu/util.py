@@ -37,7 +37,7 @@
 #
 
 # Nordic libraries
-from pc_ble_driver_py.exceptions import NordicSemiException
+from nordicsemi.exceptions import NordicSemiException
 from enum import Enum
 
 # From http://stackoverflow.com/questions/4472901/python-enum-class-with-tostring-fromstring

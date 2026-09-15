@@ -56,7 +56,7 @@ try:
 except Exception:
     print("Failed to import ecdsa, cannot do signing")
 
-from pc_ble_driver_py.exceptions import InvalidArgumentException, IllegalStateException
+from nordicsemi.exceptions import InvalidArgumentException, IllegalStateException
 
 
 keys_default_pem = """-----BEGIN EC PRIVATE KEY-----
