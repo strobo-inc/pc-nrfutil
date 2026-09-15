@@ -55,7 +55,7 @@ from nordicsemi import version as nrfutil_version
 from nordicsemi.dfu.signing import Signing
 from nordicsemi.dfu.util import query_func
 from nordicsemi.zigbee.prod_config import ProductionConfig, ProductionConfigWrongException, ProductionConfigTooLargeException
-from pc_ble_driver_py.exceptions import NordicSemiException, NotImplementedException
+from nordicsemi.exceptions import NordicSemiException, NotImplementedException
 
 logger = logging.getLogger(__name__)
 

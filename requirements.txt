@@ -2,8 +2,7 @@ six >= 1.9
 pyserial >= 2.7
 click >= 6.0
 ecdsa >= 0.13
-protobuf
-pc_ble_driver_py >= 0.11.4
+protobuf >= 5.29.6, < 6
 tqdm
 piccata
 intelhex

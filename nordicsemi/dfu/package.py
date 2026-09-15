@@ -49,7 +49,7 @@ import hashlib
 
 
 # Nordic libraries
-from pc_ble_driver_py.exceptions import NordicSemiException
+from nordicsemi.exceptions import NordicSemiException
 from nordicsemi.dfu.nrfhex import *
 from nordicsemi.dfu.init_packet_pb import *
 from nordicsemi.dfu.manifest import ManifestGenerator, Manifest

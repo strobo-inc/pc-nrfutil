@@ -47,7 +47,6 @@ import platform
 import sys
 
 from setuptools import setup, find_packages
-from setuptools.command.test import test as TestCommand
 
 from nordicsemi import version
 
@@ -118,16 +117,6 @@ description = """A Python package that includes the nrfutil utility and the nord
 with open("requirements.txt") as reqs_file:
     reqs = reqs_file.readlines()
 
-class NoseTestCommand(TestCommand):
-    def finalize_options(self):
-        TestCommand.finalize_options(self)
-        self.test_args = []
-        self.test_suite = True
-
-    def run_tests(self):
-        import nose
-        nose.run_exit(argv=['nosetests', '--with-xunit', '--xunit-file=test-reports/unittests.xml'])
-
 setup(
     name="nrfutil",
     version=version.NRFUTIL_VERSION,
@@ -141,11 +130,12 @@ setup(
                 '': ['../requirements.txt', 'thread/hex/ncp.hex', 'zigbee/hex/ota.hex']
     },
     install_requires=reqs,
-    zipfile=None,
-    tests_require=[
-        "nose >= 1.3.4",
-        "behave"
-    ],
+    extras_require={
+        # BLE DFU / connectivity flashing only. pc-ble-driver-py has no wheels
+        # for Python 3.11+, so it is not a hard requirement.
+        'ble': ['pc_ble_driver_py >= 0.11.4'],
+    },
+    python_requires='>=3.8',
     zip_safe=False,
     classifiers=[
         'Development Status :: 4 - Beta',
@@ -162,12 +152,9 @@ setup(
 
         'License :: Other/Proprietary License',
 
-        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3',
     ],
     keywords = 'nordic nrf51 nrf52 ble bluetooth dfu ota softdevice serialization nrfutil pc-nrfutil',
-    cmdclass={
-        'test': NoseTestCommand
-    },
     entry_points='''
       [console_scripts]
       nrfutil = nordicsemi.__main__:cli

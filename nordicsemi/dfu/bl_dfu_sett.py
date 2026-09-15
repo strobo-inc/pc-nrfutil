@@ -50,7 +50,7 @@ from nordicsemi.dfu import intelhex
 from nordicsemi.dfu.intelhex import IntelHexError
 from nordicsemi.dfu.nrfhex import *
 from nordicsemi.dfu.package import Package
-from pc_ble_driver_py.exceptions import NordicSemiException
+from nordicsemi.exceptions import NordicSemiException
 
 logger = logging.getLogger(__name__)
 
